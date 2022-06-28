@@ -1,11 +1,18 @@
 
 const { result } = require('lodash');
 const product=require('../models/product');
+const customer=require('../models/customer');
 
 const table=function(req , res)
 {
     product.sync();
     res.json({message:"Table Created"});
+}
+
+const custTable=function(req , res)
+{
+    customer.sync({alter:true});
+    res.json({message:"customer Table created"});
 }
 
 const insert=function(req , res)
@@ -66,8 +73,22 @@ const update=function(req , res)
     });
 }
 
+const del=function(req , res)
+{
+    product.destroy({
+        where:{
+            product_id:req.query.product_id,
+        },
+    }).then((result)=>{
+        return res.json(result);
+    }).catch((error)=>{
+        console.log(error);
+    })
+}
 module.exports.insert=insert;
 module.exports.table=table;
 module.exports.displayAll=displayAll;
 module.exports.displayById=displayById;
 module.exports.update=update;
+module.exports.del=del;
+module.exports.custTable=custTable;
